@@ -2,14 +2,13 @@ package com.narxoz.rpg.hero;
 
 public class Warrior implements Hero {
     private final String name;
+    private int hp;
     private final int power;
-    private int health;
 
-    public Warrior(String name) {
+    public Warrior(String name, int hp, int power) {
         this.name = name;
-        // TODO: tune stats if needed
-        this.power = 20;
-        this.health = 120;
+        this.hp = hp;
+        this.power = power;
     }
 
     @Override
@@ -24,19 +23,11 @@ public class Warrior implements Hero {
 
     @Override
     public void receiveDamage(int amount) {
-        // TODO: enforce min 0
-        health -= amount;
-        if (health < 0) {
-            health = 0;
-        }
+        hp -= amount;
     }
 
     @Override
     public boolean isAlive() {
-        return health > 0;
-    }
-
-    public int getHealth() {
-        return health;
+        return hp > 0;
     }
 }

@@ -2,10 +2,12 @@ package com.narxoz.rpg.battle;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Iterator;
 
-public final class BattleEngine {
+public class BattleEngine {
+
     private static BattleEngine instance;
-    private Random random = new Random(1L);
+    private Random random = new Random();
 
     private BattleEngine() {
     }
@@ -18,21 +20,45 @@ public final class BattleEngine {
     }
 
     public BattleEngine setRandomSeed(long seed) {
-        this.random = new Random(seed);
+        random.setSeed(seed);
         return this;
     }
 
-    public void reset() {
-        // TODO: reset any battle state if you add it
+    public EncounterResult runEncounter(List<Combatant> teamA, List<Combatant> teamB) {
+
+        while (!teamA.isEmpty() && !teamB.isEmpty()) {
+
+            attackRound(teamA, teamB);
+            attackRound(teamB, teamA);
+
+            removeDead(teamA);
+            removeDead(teamB);
+        }
+
+        String winner = teamA.isEmpty() ? "Team B" : "Team A";
+        return new EncounterResult(winner);
     }
 
-    public EncounterResult runEncounter(List<Combatant> teamA, List<Combatant> teamB) {
-        // TODO: validate inputs and run round-based battle
-        // TODO: use random if you add critical hits or target selection
-        EncounterResult result = new EncounterResult();
-        result.setWinner("TBD");
-        result.setRounds(0);
-        result.addLog("TODO: implement battle simulation");
-        return result;
+    private void attackRound(List<Combatant> attackers, List<Combatant> defenders) {
+
+        for (Combatant attacker : attackers) {
+            if (defenders.isEmpty()) break;
+
+            Combatant target = defenders.get(0);
+            target.takeDamage(attacker.getAttackPower());
+        }
+    }
+
+    private void removeDead(List<Combatant> team) {
+        Iterator<Combatant> iterator = team.iterator();
+        while (iterator.hasNext()) {
+            if (!iterator.next().isAlive()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public void reset() {
+        instance = null;
     }
 }

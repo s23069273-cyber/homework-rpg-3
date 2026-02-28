@@ -4,6 +4,7 @@ import com.narxoz.rpg.battle.Combatant;
 import com.narxoz.rpg.enemy.Enemy;
 
 public class EnemyCombatantAdapter implements Combatant {
+
     private final Enemy enemy;
 
     public EnemyCombatantAdapter(Enemy enemy) {
@@ -17,13 +18,12 @@ public class EnemyCombatantAdapter implements Combatant {
 
     @Override
     public int getAttackPower() {
-        // TODO: translate enemy damage to combat attack
         return enemy.getDamage();
     }
 
     @Override
-    public void takeDamage(int amount) {
-        enemy.applyDamage(amount);
+    public void takeDamage(int damage) {
+        enemy.applyDamage(damage);
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.narxoz.rpg.battle.BattleEngine;
 import com.narxoz.rpg.battle.Combatant;
 import com.narxoz.rpg.battle.EncounterResult;
 import com.narxoz.rpg.enemy.Goblin;
-import com.narxoz.rpg.hero.Mage;
 import com.narxoz.rpg.hero.Warrior;
 
 import java.util.ArrayList;
@@ -14,37 +13,19 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== RPG Battle Engine Demo ===\n");
 
-        // TODO: Create heroes and enemies
-        Warrior warrior = new Warrior("Arthas");
-        Mage mage = new Mage("Jaina");
-        Goblin goblin = new Goblin();
+        BattleEngine engine = BattleEngine.getInstance().setRandomSeed(42);
 
-        // TODO: Wrap with adapters
-        List<Combatant> heroes = new ArrayList<>();
-        heroes.add(new HeroCombatantAdapter(warrior));
-        heroes.add(new HeroCombatantAdapter(mage));
+        List<Combatant> teamA = new ArrayList<>();
+        teamA.add(new HeroCombatantAdapter(new Warrior("Warrior A", 30, 7)));
+        teamA.add(new HeroCombatantAdapter(new Warrior("Warrior B", 25, 6)));
 
-        List<Combatant> enemies = new ArrayList<>();
-        enemies.add(new EnemyCombatantAdapter(goblin));
+        List<Combatant> teamB = new ArrayList<>();
+        teamB.add(new EnemyCombatantAdapter(new Goblin("Goblin X", 20, 5)));
+        teamB.add(new EnemyCombatantAdapter(new Goblin("Goblin Y", 18, 4)));
 
-        // TODO: Demonstrate Singleton behavior
-        BattleEngine engineA = BattleEngine.getInstance();
-        BattleEngine engineB = BattleEngine.getInstance();
-        System.out.println("Same instance? " + (engineA == engineB));
-        System.out.println();
-
-        // TODO: Run battle and print summary
-        engineA.setRandomSeed(42L);
-        EncounterResult result = engineA.runEncounter(heroes, enemies);
-
+        EncounterResult result = engine.runEncounter(teamA, teamB);
+        System.out.println(result);
         System.out.println("Winner: " + result.getWinner());
-        System.out.println("Rounds: " + result.getRounds());
-        for (String line : result.getBattleLog()) {
-            System.out.println(line);
-        }
-
-        System.out.println("\n=== Demo Complete ===");
     }
 }
